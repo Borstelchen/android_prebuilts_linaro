@@ -1,0 +1,172 @@
+manifest_format=1.1
+
+# Note that for ABE, these parameters are not used
+# Component data for gmp
+gmp_url=http://snapshots.linaro.org/components/toolchain/infrastructure
+gmp_filespec=gmp-6.1.0.tar.xz
+gmp_configure="--enable-cxx --enable-fft"
+gmp_staticlink="yes"
+
+# Component data for mpfr
+mpfr_url=http://snapshots.linaro.org/components/toolchain/infrastructure
+mpfr_filespec=mpfr-3.1.4.tar.xz
+mpfr_configure="--with-gmp=${local_builds}/destdir/${host}"
+mpfr_staticlink="yes"
+
+# Component data for mpc
+mpc_url=http://snapshots.linaro.org/components/toolchain/infrastructure/
+mpc_filespec=mpc-1.0.3.tar.gz
+mpc_configure="--with-gmp=${local_builds}/destdir/${host} --with-mpfr=${local_builds}/destdir/${host}"
+mpc_staticlink="yes"
+
+# Component data for linux
+linux_url=http://snapshots.linaro.org/components/toolchain/infrastructure
+linux_filespec=linux-4.6.tar.xz
+linux_makeflags="headers_install ARCH=arm64 INSTALL_HDR_PATH=${sysroots}/usr"
+linux_staticlink="yes"
+
+# Component data for dejagnu
+dejagnu_url=http://git.linaro.org/git/toolchain
+dejagnu_branch=linaro-local/stable
+dejagnu_revision=9c19d3d7473ef731b74f3a48fcce5a168bf701ec
+dejagnu_filespec=dejagnu.git
+dejagnu_staticlink="yes"
+
+# Component data for binutils
+binutils_url=http://git.linaro.org/git/toolchain
+binutils_branch=linaro_binutils-2_27-branch
+binutils_revision=fbc6c6763e70cb2376e2de990c7fc54c0ee44a59
+binutils_filespec=binutils-gdb.git
+binutils_configure="--enable-lto --enable-plugins --disable-werror CPPFLAGS=-UFORTIFY_SOURCE --with-pkgversion=Linaro_Binutils-2016.08 --disable-gdb --disable-sim --disable-libdecnumber --disable-readline --with-sysroot=${sysroots}"
+binutils_staticlink="yes"
+
+# Component data for gcc
+gcc_url=http://people.linaro.org/~ryan.arnold
+gcc_filespec=gcc-linaro-6.1-2016.08.tar.xz
+gcc_makeflags="MAKEINFOFLAGS=--force"
+gcc_configure=
+gcc_staticlink="no"
+gcc_stage1_flags="--with-mpc=${local_builds}/destdir/${host} --with-mpfr=${local_builds}/destdir/${host} --with-gmp=${local_builds}/destdir/${host} --with-gnu-as --with-gnu-ld --disable-libstdcxx-pch --disable-libmudflap --with-cloog=no --with-ppl=no --with-isl=no --disable-nls --enable-c99 --enable-gnu-indirect-function --with-arch=armv8-a --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419 --enable-multiarch --disable-libssp --disable-libquadmath --disable-threads --without-headers --with-newlib --disable-libmudflap --disable-bootstrap --disable-decimal-float --disable-libgomp --disable-libatomic --disable-libsanitizer --disable-plugins --disable-libitm MAKEINFO=echo --enable-languages=c --with-sysroot=${local_builds}/sysroot-aarch64-linux-gnu --disable-shared --with-glibc-version=2.18"
+gcc_stage2_flags="--with-mpc=${local_builds}/destdir/${host} --with-mpfr=${local_builds}/destdir/${host} --with-gmp=${local_builds}/destdir/${host} --with-gnu-as --with-gnu-ld --disable-libstdcxx-pch --disable-libmudflap --with-cloog=no --with-ppl=no --with-isl=no --disable-nls --enable-c99 --enable-gnu-indirect-function --with-arch=armv8-a --enable-fix-cortex-a53-835769 --enable-fix-cortex-a53-843419 --enable-multiarch --with-build-sysroot=${sysroots} --enable-lto --enable-linker-build-id --enable-long-long --enable-shared --with-sysroot=${local_builds}/destdir/${host}/aarch64-linux-gnu/libc --enable-languages=c,c++,fortran,lto --enable-checking=release --disable-bootstrap"
+
+# Component data for glibc
+glibc_url=http://git.linaro.org/git/toolchain
+glibc_branch=linaro/2.23/master
+glibc_revision=bb433427a5de00b74d308532c27dc18cc348e03f
+glibc_filespec=glibc.git
+glibc_makeflags="PARALLELMFLAGS=-j32"
+glibc_configure="--disable-profile --without-gd --enable-obsolete-rpc --with-headers=${sysroots}/usr/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes --without-selinux --disable-werror"
+
+# Component data for gdb
+gdb_url=http://git.linaro.org/git/toolchain
+gdb_branch=gdb-7.11-branch
+gdb_revision=140bf80050b34f0947b34dba93b830ea2bfc5040
+gdb_filespec=binutils-gdb.git
+gdb_configure="--with-gnu-ld --enable-plugins --enable-tui --with-pkgversion=Linaro_GDB-2016.08 --disable-gas --disable-binutils --disable-ld --disable-gold --disable-gprof --with-python=yes"
+gdb_staticlink="yes"
+
+# Component data for gdbserver
+gdbserver_url=http://git.linaro.org/git/toolchain
+gdbserver_branch=gdb-7.11-branch
+gdbserver_revision=140bf80050b34f0947b34dba93b830ea2bfc5040
+gdbserver_filespec=binutils-gdb.git
+gdbserver_configure="LDFLAGS=-static CFLAGS=--sysroot=${sysroots}"
+gdbserver_staticlink="yes"
+
+
+clibrary=glibc
+target=aarch64-linux-gnu
+
+ ##############################################################################
+ # Everything below this line is only for informational purposes for developers
+ ##############################################################################
+
+# Build machine data
+build: linux
+host: i686-pc-linux-gnu
+kernel: 4.4.0-34-generic
+hostname: docker-trusty-i386-tcwg
+distribution: trusty
+host_gcc: gcc version 4.8.2 (Ubuntu 4.8.2-19ubuntu1) 
+
+# These aren't used in the repeat build. just a sanity check for developers
+build directory: /home/tcwg-buildslave/workspace/tcwg-make-release/label/docker-trusty-i386-tcwg/target/aarch64-linux-gnu/_build/builds
+sysroot directory: /home/tcwg-buildslave/workspace/tcwg-make-release/label/docker-trusty-i386-tcwg/target/aarch64-linux-gnu/_build/sysroots/aarch64-linux-gnu
+snapshots directory: /home/tcwg-buildslave/workspace/tcwg-make-release/label/docker-trusty-i386-tcwg/target/aarch64-linux-gnu/snapshots
+git reference directory: /home/tcwg-buildslave/snapshots-ref
+
+abe_url=https://git-us.linaro.org/toolchain
+abe_branch=branch=
+abe_revision=0cf6e0fb248b12ac50e165382be1684a388e4e23
+abe_filespec=abe.git
+abe_configure=""
+
+--------------------- binutils ----------------------
+commit fbc6c6763e70cb2376e2de990c7fc54c0ee44a59
+Author: Nick Clifton <nickc@redhat.com>
+Date:   Tue Aug 23 09:45:11 2016 +0100
+
+    Fix seg-fault in ARM linker when trying to parse a binary file.
+    
+    	* elf32-arm.c (elf32_arm_count_additional_relocs): Return zero if
+    	there is no arm data associated with the section.
+
+--------------------- glibc ----------------------
+commit bb433427a5de00b74d308532c27dc18cc348e03f
+Author: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Date:   Tue May 17 10:16:39 2016 -0300
+
+    Add runtime check for __ASSUME_REQUEUE_PI (BZ# 18463)
+    
+    This patch adds a runtime check for requeue priority futexes
+    (FUTEX_{WAIT,CMP}_REQUEUE_PI) for configurations that do not define
+    __ASSUME_REQUEUE_PI.
+    
+    It uses the same check uses for priority lock/unlock support, where
+    issuing a futex operation with FUTEX_UNLOCK_PI returns if kernel has
+    or not internal 'futex_cmpxchg_enabled' support (which is also used
+    on requeue priority futexes operations).
+    
+    For architectures that already have __ASSUME_REQUEUE_PI the code
+    flow does not change, 'use_requeue_pi' returns the previous chec
+    logic.  Also, if 'futex_cmpxchg_enabled' is not supported by the
+    kernel, the previous logic will be used (by issuing a default futex
+    operation).
+    
+    Tested on ARM (v3.8 kernel) and x86_64.
+    
+    	* nptl/pthreadP.h (prio_inherit_missing): Change name to
+    	__prio_inherit_missing.
+    	(USE_REQUEUE_PI): Remove define.
+    	(use_requeue_pi): New function.
+    	* nptl/pthread_cond_broadcast.c [__ASSUME_REQUEUE_PI]
+    	(__pthread_cond_broadcast): Remove ifdef.
+    	(USE_REQUEUE_PI): Change to use_requeue_pi.
+    	* nptl/pthread_cond_signal.c [__ASSUME_REQUEUE_PI]
+    	(__pthread_cond_signal): Remove ifdef.
+    	(USE_REQUEUE_PI): Change to use_requeue_pi.
+    	* nptl/pthread_cond_timedwait.c [__ASSUME_REQUEUE_PI]
+    	(__pthread_cond_timedwait): Remove ifdef.
+    	(USE_REQUEUE_PI): Change to use_requeue_pi.
+    	( nptl/pthread_cond_wait.c [__ASSUME_REQUEUE_PI]
+    	(__pthread_cond_wait): Remove ifdef.
+    	(USE_REQUEUE_PI): Change to use_requeue_pi.
+    	* nptl/pthread_mutex_init.c (prio_inherit_missing): Remove 'static'
+    	qualifier and change name to __prio_inherit_missing.
+
+--------------------- abe ----------------------
+commit 0cf6e0fb248b12ac50e165382be1684a388e4e23
+Author: Christophe Lyon <christophe.lyon@linaro.org>
+Date:   Thu Aug 25 14:31:13 2016 +0200
+
+    scripts/MakeRelease.job: append GCC version to fileserver upload directory names
+    
+    We want to upload releases of different gcc branches to different
+    directories: 4.9-2016.08, 5-2016.08-2, 6-2016.08-2-rc2 for instance.
+    
+    The release YYYY.MM[-SPIN][-RC] is provided in Jenkins by the release
+    manager, but the gcc release version is parsed from the generated
+    manifest filenames.
+    
+    Change-Id: I9da981ea74c457184b4ef15459598a201a4238bc
+
